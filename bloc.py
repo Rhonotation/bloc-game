@@ -38,13 +38,14 @@ patterns = list(moves.keys())
 # 1 is black 0 is white -1 is unclaimed / empty
 class BlocDataStruct:
     global moves, patterns
-    def __init__(self, master):
+    def __init__(self, master=0):
         self.board = np.array([[1, 0, -1, 1, 0],[0, 1, -1, 0, 1], [1, 0, -1, 1, 0], [0, 1, -1, 0, 1], [1, 0, -1, 1, 0]])
         self.pieces = np.array([[1, -1, -1, -1, 0], [1, -1, -1, -1, 0], [1, -1, -1, -1, 0], [1, -1, -1, -1, 0], [1, -1, -1, -1, 0]])
         self.cellselected = [0,0]
         self.selected = False
         self.master = master
         self.turn = 1
+        self.state_history = {}
 
     def get_board(self):
         return self.board
@@ -75,14 +76,10 @@ class BlocDataStruct:
     def toggle_select_cell(self, row, col):
         vector = [row - self.cellselected[0], col - self.cellselected[1]]
         if vector[0] * vector[1] == 0 and (vector[0] + vector[1] != 0) and self.selected:
-            print(vector)
             vector = [vector[0] / abs(vector[0] + vector[1]), vector[1] / abs(vector[0] + vector[1])]
             if self.check_legal(self.cellselected, vector / np.linalg.norm(vector)):
                 self.full_move(self.cellselected, vector / np.linalg.norm(vector))
                 self.selected = False
-                print("Legal move executed.")
-            else:
-                print("Illegal move attempted.")
         elif self.pieces[row][col] in [0, 1]:
             if self.cellselected == [row, col] and self.selected:
                 self.selected = False
@@ -107,25 +104,33 @@ class BlocDataStruct:
         points = [start,
                   [int(start[0] + direction[0]), int(start[1] + direction[1])],
                   [int(start[0] + 2 * direction[0]), int(start[1] + 2 * direction[1])]]
-        print(points)
+        
+        if any(p[0] < 0 or p[1] < 0 for p in points):
+            if points[1][0] < 0 or points[1][1] < 0:
+                return [False, start, direction, points]
+            else:
+                points = points[0:2]
+                pattern_points = [[self.pieces[point[0]][point[1]] for point in points], [self.board[point[0]][point[1]] for point in points]]
+                pattern_tuple = (tuple(pattern_points[0]), tuple(pattern_points[1]))
+                return [True, start, direction, pattern_tuple]
         try:
             pattern_points = [[self.pieces[point[0]][point[1]] for point in points], [self.board[point[0]][point[1]] for point in points]]
         except IndexError:
             try:
+                # Do the same check for the shortened 2-point list
+                if any(p[0] < 0 or p[1] < 0 for p in points[0:2]):
+                    raise IndexError
                 pattern_points = [[self.pieces[point[0]][point[1]] for point in points[0:2]], [self.board[point[0]][point[1]] for point in points[0:2]]]
             except IndexError:
-                print("FAIL")
                 return [False, start, direction, points]
             pattern_tuple = (tuple(pattern_points[0]), tuple(pattern_points[1]))
-            print("Shortened out of bounds", pattern_tuple)
             return [True, start, direction, pattern_tuple]
+        
         pattern_tuple = tuple([[int(x) for x in pp] for pp in pattern_points])
         if pattern_tuple in patterns:
-            print("Full always in bounds", pattern_tuple)
             return [True, start, direction, pattern_tuple]
         else:
-            print("Shortened always in bounds", tuple([pat[0:2] for pat in pattern_tuple]))
-            return [True, start, direction, tuple([pat[0:2] for pat in pattern_tuple])] # Format: [legal?, start, direction, pattern]
+            return [True, start, direction, tuple([pat[0:2] for pat in pattern_tuple])]
     
     def transform(self, raycasting):
         if raycasting[0]:
@@ -136,7 +141,6 @@ class BlocDataStruct:
     def replace_transform(self, transformed_raycast):
         if transformed_raycast[0]:
             for i in range(len(transformed_raycast[3])):
-                print("First Index:", transformed_raycast[1][0] + i * transformed_raycast[2][0], "Second Index:", transformed_raycast[1][1] + i * transformed_raycast[2][1])
                 self.pieces[int(transformed_raycast[1][0] + i * transformed_raycast[2][0])][int(transformed_raycast[1][1] + i * transformed_raycast[2][1])] = transformed_raycast[3][0][i]
                 self.board[int(transformed_raycast[1][0] + i * transformed_raycast[2][0])][int(transformed_raycast[1][1] + i * transformed_raycast[2][1])] = transformed_raycast[3][1][i]
             return True
@@ -148,6 +152,9 @@ class BlocDataStruct:
             if not self.replace_transform(self.transform(self.raycast(start, direction))):
                 return False
             self.turn = 1 - self.turn
+
+            state_key = (self.board.tobytes(), self.pieces.tobytes())
+            self.state_history[state_key] = self.state_history.get(state_key, 0) + 1
             return True
         else:
             return False
@@ -166,7 +173,7 @@ class BlocDataStruct:
                         if raycast_result[0]:
                             transformed = self.transform(raycast_result)
                             if transformed[0]:
-                                legal_moves.append((row, col, direction))
+                                legal_moves.append(([row, col], direction))
         return legal_moves
 
     def check_legal(self, start, direction):
@@ -176,20 +183,28 @@ class BlocDataStruct:
         return False
     
     def check_win(self):
-        if self.pieces.count(1) == 1 and self.pieces.count(0) > 1:
+        current_key = (self.board.tobytes(), self.pieces.tobytes())
+        if self.state_history.get(current_key, 0) >= 3:
+            return 1 - self.turn
+        if np.count_nonzero(self.pieces == 1) == 1 and np.count_nonzero(self.pieces == 0) > 1:
             return 0
-        if self.pieces.count(0) == 1 and self.pieces.count(1) > 1:
+        if np.count_nonzero(self.pieces == 0) == 1 and np.count_nonzero(self.pieces == 1) > 1:
             return 1
-        if self.pieces.count(0) == 1 and self.pieces.count(1) == 1:
+        if np.count_nonzero(self.pieces == 0) == 1 and np.count_nonzero(self.pieces == 1) == 1:
             return 0.5
-        if self.pieces[:,4].count(1) >= 2:
+        if np.count_nonzero(self.pieces[:,4] == 1) >= 2:
             return 1
-        if self.pieces[:,0].count(0) >= 2:
+        if np.count_nonzero(self.pieces[:,0] == 0) >= 2:
             return 0
         return -1
 
-    def check_kill(self):
-        pass
+    def clone(self):
+        new_board = BlocDataStruct()
+        new_board.board = self.board.copy()
+        new_board.pieces = self.pieces.copy()
+        new_board.state_history = self.state_history.copy()
+        new_board.turn = self.turn
+        return new_board
 
 class PygameBlocDisplay:
     def __init__(self, master):

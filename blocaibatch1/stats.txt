@@ -1,0 +1,114 @@
+Epoch 0 finished. Time: 9.55. Time per average AI: 0.07. Total time: 9.55
+Epoch 1 finished. Time: 9.03. Time per average AI: 0.07. Total time: 18.58
+Epoch 2 finished. Time: 9.21. Time per average AI: 0.07. Total time: 27.79
+Epoch 3 finished. Time: 8.76. Time per average AI: 0.07. Total time: 36.55
+Epoch 4 finished. Time: 9.38. Time per average AI: 0.07. Total time: 45.93
+Epoch 5 finished. Time: 9.57. Time per average AI: 0.07. Total time: 55.50
+Epoch 6 finished. Time: 8.66. Time per average AI: 0.07. Total time: 64.15
+Epoch 7 finished. Time: 9.29. Time per average AI: 0.07. Total time: 73.44
+Epoch 8 finished. Time: 9.39. Time per average AI: 0.07. Total time: 82.84
+Epoch 9 finished. Time: 9.64. Time per average AI: 0.08. Total time: 92.47
+Epoch 10 finished. Time: 9.24. Time per average AI: 0.07. Total time: 101.71
+Epoch 11 finished. Time: 8.87. Time per average AI: 0.07. Total time: 110.58
+Epoch 12 finished. Time: 9.32. Time per average AI: 0.07. Total time: 119.90
+Epoch 13 finished. Time: 8.93. Time per average AI: 0.07. Total time: 128.84
+Epoch 14 finished. Time: 9.51. Time per average AI: 0.07. Total time: 138.34
+Epoch 15 finished. Time: 9.14. Time per average AI: 0.07. Total time: 147.49
+Epoch 16 finished. Time: 9.35. Time per average AI: 0.07. Total time: 156.84
+Epoch 17 finished. Time: 9.85. Time per average AI: 0.08. Total time: 166.70
+Epoch 18 finished. Time: 9.13. Time per average AI: 0.07. Total time: 175.82
+Epoch 19 finished. Time: 8.94. Time per average AI: 0.07. Total time: 184.76
+Epoch 20 finished. Time: 8.22. Time per average AI: 0.06. Total time: 192.98
+Epoch 21 finished. Time: 8.52. Time per average AI: 0.07. Total time: 201.50
+Epoch 22 finished. Time: 8.13. Time per average AI: 0.06. Total time: 209.63
+Epoch 23 finished. Time: 8.48. Time per average AI: 0.07. Total time: 218.11
+Epoch 24 finished. Time: 8.30. Time per average AI: 0.06. Total time: 226.41
+Epoch 25 finished. Time: 9.20. Time per average AI: 0.07. Total time: 235.61
+Epoch 26 finished. Time: 8.93. Time per average AI: 0.07. Total time: 244.54
+Epoch 27 finished. Time: 8.20. Time per average AI: 0.06. Total time: 252.74
+Epoch 28 finished. Time: 8.75. Time per average AI: 0.07. Total time: 261.49
+Epoch 29 finished. Time: 9.02. Time per average AI: 0.07. Total time: 270.51
+Epoch 30 finished. Time: 8.81. Time per average AI: 0.07. Total time: 279.32
+Epoch 31 finished. Time: 8.59. Time per average AI: 0.07. Total time: 287.91
+Epoch 32 finished. Time: 8.96. Time per average AI: 0.07. Total time: 296.88
+Epoch 33 finished. Time: 7.95. Time per average AI: 0.06. Total time: 304.83
+Epoch 34 finished. Time: 7.84. Time per average AI: 0.06. Total time: 312.67
+Epoch 35 finished. Time: 7.92. Time per average AI: 0.06. Total time: 320.60
+Epoch 36 finished. Time: 8.48. Time per average AI: 0.07. Total time: 329.08
+Epoch 37 finished. Time: 8.05. Time per average AI: 0.06. Total time: 337.13
+Epoch 38 finished. Time: 8.76. Time per average AI: 0.07. Total time: 345.88
+Epoch 39 finished. Time: 8.06. Time per average AI: 0.06. Total time: 353.94
+Epoch 40 finished. Time: 7.85. Time per average AI: 0.06. Total time: 361.79
+Epoch 41 finished. Time: 7.85. Time per average AI: 0.06. Total time: 369.64
+Epoch 42 finished. Time: 7.96. Time per average AI: 0.06. Total time: 377.61
+Epoch 43 finished. Time: 8.19. Time per average AI: 0.06. Total time: 385.80
+Epoch 44 finished. Time: 7.69. Time per average AI: 0.06. Total time: 393.49
+Epoch 45 finished. Time: 8.18. Time per average AI: 0.06. Total time: 401.67
+Epoch 46 finished. Time: 7.73. Time per average AI: 0.06. Total time: 409.40
+Epoch 47 finished. Time: 7.91. Time per average AI: 0.06. Total time: 417.31
+Epoch 48 finished. Time: 7.51. Time per average AI: 0.06. Total time: 424.81
+Epoch 49 finished. Time: 8.00. Time per average AI: 0.06. Total time: 432.82
+Epoch 50 finished. Time: 8.09. Time per average AI: 0.06. Total time: 440.90
+Epoch 51 finished. Time: 8.02. Time per average AI: 0.06. Total time: 448.92
+Epoch 52 finished. Time: 7.40. Time per average AI: 0.06. Total time: 456.32
+Epoch 53 finished. Time: 7.86. Time per average AI: 0.06. Total time: 464.18
+Epoch 54 finished. Time: 7.66. Time per average AI: 0.06. Total time: 471.84
+Epoch 55 finished. Time: 7.87. Time per average AI: 0.06. Total time: 479.71
+Epoch 56 finished. Time: 7.60. Time per average AI: 0.06. Total time: 487.31
+Epoch 57 finished. Time: 7.72. Time per average AI: 0.06. Total time: 495.03
+Epoch 58 finished. Time: 7.75. Time per average AI: 0.06. Total time: 502.78
+Epoch 59 finished. Time: 7.79. Time per average AI: 0.06. Total time: 510.57
+Epoch 60 finished. Time: 7.37. Time per average AI: 0.06. Total time: 517.94
+Epoch 61 finished. Time: 7.54. Time per average AI: 0.06. Total time: 525.48
+Epoch 62 finished. Time: 7.50. Time per average AI: 0.06. Total time: 532.98
+Epoch 63 finished. Time: 7.85. Time per average AI: 0.06. Total time: 540.84
+Epoch 64 finished. Time: 7.35. Time per average AI: 0.06. Total time: 548.19
+Epoch 65 finished. Time: 7.66. Time per average AI: 0.06. Total time: 555.85
+Epoch 66 finished. Time: 7.44. Time per average AI: 0.06. Total time: 563.28
+Epoch 67 finished. Time: 7.88. Time per average AI: 0.06. Total time: 571.16
+Epoch 68 finished. Time: 7.36. Time per average AI: 0.06. Total time: 578.52
+Epoch 69 finished. Time: 7.81. Time per average AI: 0.06. Total time: 586.33
+Epoch 70 finished. Time: 7.51. Time per average AI: 0.06. Total time: 593.84
+Epoch 71 finished. Time: 7.44. Time per average AI: 0.06. Total time: 601.29
+Epoch 72 finished. Time: 7.36. Time per average AI: 0.06. Total time: 608.65
+Epoch 73 finished. Time: 7.44. Time per average AI: 0.06. Total time: 616.09
+Epoch 74 finished. Time: 7.62. Time per average AI: 0.06. Total time: 623.70
+Epoch 75 finished. Time: 7.61. Time per average AI: 0.06. Total time: 631.31
+Epoch 76 finished. Time: 7.56. Time per average AI: 0.06. Total time: 638.87
+Epoch 77 finished. Time: 7.84. Time per average AI: 0.06. Total time: 646.72
+Epoch 78 finished. Time: 7.51. Time per average AI: 0.06. Total time: 654.23
+Epoch 79 finished. Time: 7.49. Time per average AI: 0.06. Total time: 661.72
+Epoch 80 finished. Time: 7.81. Time per average AI: 0.06. Total time: 669.54
+Epoch 81 finished. Time: 8.25. Time per average AI: 0.06. Total time: 677.78
+Epoch 82 finished. Time: 7.90. Time per average AI: 0.06. Total time: 685.68
+Epoch 83 finished. Time: 7.78. Time per average AI: 0.06. Total time: 693.46
+Epoch 84 finished. Time: 7.94. Time per average AI: 0.06. Total time: 701.40
+Epoch 85 finished. Time: 8.02. Time per average AI: 0.06. Total time: 709.42
+Epoch 86 finished. Time: 7.92. Time per average AI: 0.06. Total time: 717.34
+Epoch 87 finished. Time: 7.80. Time per average AI: 0.06. Total time: 725.14
+Epoch 88 finished. Time: 7.65. Time per average AI: 0.06. Total time: 732.80
+Epoch 89 finished. Time: 7.72. Time per average AI: 0.06. Total time: 740.52
+Epoch 90 finished. Time: 7.86. Time per average AI: 0.06. Total time: 748.37
+Epoch 91 finished. Time: 7.95. Time per average AI: 0.06. Total time: 756.32
+Epoch 92 finished. Time: 8.83. Time per average AI: 0.07. Total time: 765.16
+Epoch 93 finished. Time: 8.54. Time per average AI: 0.07. Total time: 773.70
+Epoch 94 finished. Time: 8.37. Time per average AI: 0.07. Total time: 782.06
+Epoch 95 finished. Time: 8.10. Time per average AI: 0.06. Total time: 790.16
+Epoch 96 finished. Time: 8.23. Time per average AI: 0.06. Total time: 798.39
+Epoch 97 finished. Time: 8.08. Time per average AI: 0.06. Total time: 806.47
+Epoch 98 finished. Time: 8.90. Time per average AI: 0.07. Total time: 815.36
+Epoch 99 finished. Time: 9.09. Time per average AI: 0.07. Total time: 824.45
+Finished!
+
+Average W:
+[[ 0.26458356 -0.05066545  0.08001766 -0.15381317  0.17851261]
+ [-0.038066   -0.40135037 -0.06811409  0.25303539 -0.13473262]
+ [-0.06305837  0.04026262 -0.07745228  0.09363515 -0.01527659]
+ [-0.08100658  0.05210505  0.12805081 -0.11419465 -0.05138583]
+ [-0.08570967 -0.12084773 -0.22984171 -0.12995887  0.10593693]]
+ Average U:
+ [[ 0.12401793  0.03592796  0.23035338  0.36953076 -0.05137196]
+ [-0.35831667 -0.01304717  0.11454392  0.04050572  0.10287462]
+ [ 0.12362562 -0.1422981  -0.16386025 -0.26471538  0.15372494]
+ [ 0.24994989 -0.03842647  0.32859026  0.03078222 -0.21346945]
+ [-0.14582312 -0.01602407 -0.24114168 -0.09815836  0.04491954]]

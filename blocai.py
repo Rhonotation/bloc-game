@@ -11,10 +11,9 @@ class MatrixAI:
         self.U = U if U is not None else np.random.uniform(-1, 1, (5, 5))
 
     def evaluate_board(self, A, B, side=1):
-        swapdict = {-1:-1, 0:1, 1:0}
         if side == 0:
-            A = np.array([[swapdict[x] for x in row] for row in A])
-            B = np.array([[swapdict[x] for x in row] for row in B])
+            A = np.where(A == 0, 1, np.where(A == 1, 0, A))
+            B = np.where(B == 0, 1, np.where(B == 1, 0, B))
         # 1. Multiply W against both matrices
         M1 = self.W @ A
         M2 = self.W @ B
@@ -64,8 +63,8 @@ class BlocAiPopulation:
     def split(self):
         np.random.shuffle(self.population)
         self.halvepopsize()
-        self.groupa = self.population[:self.popsize // 2]
-        self.groupb = self.population[self.popsize // 2:]
+        self.groupa = self.population[:len(self.population) // 2]
+        self.groupb = self.population[len(self.population) // 2:]
         self.groups = [self.groupa, self.groupb]
 
     def get_legal_moves_cached(self, matchboard):
@@ -82,8 +81,8 @@ class BlocAiPopulation:
     
     def splitforplay(self):
         self.split()
-        self.winners = [-1] * (self.popsize // 2)
-        self.fitnesspairs = [[0,0] for _ in range(self.popsize // 2)]
+        self.winners = [-1] * (len(self.population) // 2)
+        self.fitnesspairs = [[0,0] for _ in range(len(self.population) // 2)]
 
     def play_match(self, matchindex):
         ai1 = self.groupa[matchindex]
@@ -134,7 +133,7 @@ class BlocAiPopulation:
             self.winners[matchindex] = random.choice([0, 1])
     
     def play_all(self, rounds=3):
-        for i in range(self.popsize // 2):
+        for i in range(len(self.population) // 2):
             self.play_comp(i, rounds)
 
     def kill(self):
@@ -151,7 +150,7 @@ class BlocAiPopulation:
     def reproduce(self, mutation_rate=0.05):
         new_population = []
         for i in range(len(self.groupa)):
-            for _ in range(16):
+            for _ in range(4):
                 parent1 = self.groupa[i]
                 parent2 = self.groupb[i]
                 child_W = (parent1.W + parent2.W) / 2
@@ -203,4 +202,4 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
 population = BlocAiPopulation(64)
-population.train(dir="blocaibatch1", epochs=100, rounds=3, mutation_rate=0.1)
+population.train(dir="blocaibatch1", epochs=100, rounds=3, mutation_rate=0.05)

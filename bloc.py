@@ -155,9 +155,16 @@ class BlocDataStruct:
 
             state_key = (self.board.tobytes(), self.pieces.tobytes())
             self.state_history[state_key] = self.state_history.get(state_key, 0) + 1
+            self.killall()
             return True
         else:
             return False
+
+    def killall(self):
+        for row in range(self.pieces.shape[0]):
+            for col in range(self.pieces.shape[1]):
+                if self.pieces[row][col] != -1:
+                    self.kill([row, col])
     
     def reset(self):
         self.board = np.array([[1, 0, -1, 1, 0],[0, 1, -1, 0, 1], [1, 0, -1, 1, 0], [0, 1, -1, 0, 1], [1, 0, -1, 1, 0]])
@@ -205,6 +212,22 @@ class BlocDataStruct:
         new_board.state_history = self.state_history.copy()
         new_board.turn = self.turn
         return new_board
+
+    def kill(self, loc):
+        side = self.pieces[loc]
+        neighbors = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+        neighborcells = [[loc[0] + n[0], loc[1] + n[1]] for n in neighbors]
+        trueneighbors = []
+        for neighborcell in neighborcells:
+            if 0 <= neighborcell[0] < self.pieces.shape[0] and 0 <= neighborcell[1] < self.pieces.shape[1]:
+                trueneighbors.append(neighborcell)
+        boardcells = [self.board[cell] for cell in trueneighbors]
+        piececells = [self.pieces[cell] for cell in trueneighbors]
+        pressure = np.count_nonzero(piececells == side) * 2 + np.count_nonzero(boardcells == side)
+        if pressure >= 5:
+            self.pieces[loc] = -1
+            return True
+        return False
 
 class PygameBlocDisplay:
     def __init__(self, master):

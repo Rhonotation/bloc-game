@@ -30,6 +30,7 @@ class MatrixAI:
         if depth == 0:
             return self.evaluate_board(board.board, board.pieces, side)
         elif board.check_win() != -1:
+            print("Game End")
             if board.check_win() == side:
                 return float('inf')  # Win for the current side
             elif board.check_win() == 0.5:
@@ -38,15 +39,16 @@ class MatrixAI:
                 return float('-inf')  # Loss for the current side
         else:
             legal_moves = board.get_legal_moves()
-            boards = [board.clone() for move in probable_moves]
+            boards = [board.clone() for move in legal_moves]
             for board, move in zip(boards, legal_moves):
                 board.full_move(move[0], move[1])
             evals = [self.evaluate_board(board.board, board.pieces, side) for board in boards]
             probable_indices = heapq.nlargest(topn, range(len(legal_moves)), key=lambda i: legal_moves[i])
             probable_moves = [legal_moves[i] for i in probable_indices]
+            boards = [boards[i] for i in probable_indices]
             for sboard, move in zip(boards, probable_moves):
                 sboard.full_move(move[0], move[1])
-            return max(-1 * self.minimax(sboard, 1 - side, depth - 1, topn) for sboard in boards)
+            return max([-1 * self.minimax(sboard, 1 - side, depth - 1, topn) for sboard in boards])
 
 class BlocAiPopulation:
     def __init__(self, popsize, ai=None, noise=0):
@@ -54,7 +56,7 @@ class BlocAiPopulation:
         if ai == None:
             self.population = np.array([MatrixAI() for _ in range(popsize)])
         else:
-            self.population = np.array([copy.deepcopy(ai)  + np.random.uniform(-1 * noise, noise, (5, 5)) for _ in range(popsize)])
+            self.population = np.array([MatrixAI(copy.deepcopy(ai).W + np.random.uniform(-1 * noise, noise, (5, 5)), copy.deepcopy(ai).U + np.random.uniform(-1 * noise, noise, (5, 5))) for _ in range(popsize)])
         self.cache = {}
     
     def halvepopsize(self):
@@ -131,6 +133,7 @@ class BlocAiPopulation:
 
         matchboard = bloc.BlocDataStruct()
         while matchboard.check_win() == -1:
+            print("move")
             legalmoves = self.get_legal_moves_cached(matchboard)
             legalmovematrices = []
             for move in legalmoves:
@@ -241,4 +244,4 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
 population = BlocAiPopulation(64, best_ai, 0.2)
-population.train(dir="blocaibatch2", minimax=True, depth=2, epochs=100, rounds=3, mutation_rate=0.05)
+population.train(dir="blocaibatch2", minimax=True, depth=1, epochs=100, rounds=3, mutation_rate=0.05)

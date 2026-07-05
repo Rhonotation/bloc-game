@@ -54,7 +54,7 @@ class BlocAiPopulation:
         if ai == None:
             self.population = np.array([MatrixAI() for _ in range(popsize)])
         else:
-            self.population = np.array([copy.deepcopy(ai) for _ in range(popsize)]) + np.random.uniform(-1 * noise, noise, (5, 5))
+            self.population = np.array([copy.deepcopy(ai)  + np.random.uniform(-1 * noise, noise, (5, 5)) for _ in range(popsize)])
         self.cache = {}
     
     def halvepopsize(self):

@@ -97,6 +97,7 @@ class BlocAiPopulation:
 
         matchboard = bloc.BlocDataStruct()
         while matchboard.check_win() == -1:
+            print(matchboard.board, matchboard.pieces)
             legalmoves = self.get_legal_moves_cached(matchboard)
             legalmovematrices = []
             for move in legalmoves:

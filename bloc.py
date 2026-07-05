@@ -193,11 +193,11 @@ class BlocDataStruct:
         current_key = (self.board.tobytes(), self.pieces.tobytes())
         if self.state_history.get(current_key, 0) >= 3:
             return 1 - self.turn
-        if np.count_nonzero(self.pieces == 1) == 1 and np.count_nonzero(self.pieces == 0) > 1:
+        if np.count_nonzero(self.pieces == 1) < 2 and np.count_nonzero(self.pieces == 0) > 1:
             return 0
-        if np.count_nonzero(self.pieces == 0) == 1 and np.count_nonzero(self.pieces == 1) > 1:
+        if np.count_nonzero(self.pieces == 0) < 2 and np.count_nonzero(self.pieces == 1) > 1:
             return 1
-        if np.count_nonzero(self.pieces == 0) == 1 and np.count_nonzero(self.pieces == 1) == 1:
+        if np.count_nonzero(self.pieces == 0) < 2 and np.count_nonzero(self.pieces == 1) < 2:
             return 0.5
         if np.count_nonzero(self.pieces[:,4] == 1) >= 2:
             return 1
@@ -214,17 +214,17 @@ class BlocDataStruct:
         return new_board
 
     def kill(self, loc):
-        side = self.pieces[loc]
+        side = self.pieces[loc[0], loc[1]]
         neighbors = [[1, 0], [0, 1], [-1, 0], [0, -1]]
         neighborcells = [[loc[0] + n[0], loc[1] + n[1]] for n in neighbors]
         trueneighbors = []
         for neighborcell in neighborcells:
             if 0 <= neighborcell[0] < self.pieces.shape[0] and 0 <= neighborcell[1] < self.pieces.shape[1]:
                 trueneighbors.append(neighborcell)
-        boardcells = [self.board[cell] for cell in trueneighbors]
-        piececells = [self.pieces[cell] for cell in trueneighbors]
-        pressure = np.count_nonzero(piececells == side) * 2 + np.count_nonzero(boardcells == side)
-        if pressure >= 5:
+        boardcells = [self.board[r, c] for r, c in trueneighbors]
+        piececells = [self.pieces[r, c] for r, c in trueneighbors]
+        pressure = np.count_nonzero(np.array(piececells) == 1 - side) * 2 + np.count_nonzero(np.array(boardcells) == 1 - side)
+        if pressure >= 50:
             self.pieces[loc] = -1
             return True
         return False

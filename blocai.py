@@ -85,6 +85,7 @@ class BlocAiPopulation:
         self.split()
         self.winners = [-1] * (len(self.population) // 2)
         self.fitnesspairs = [[0,0] for _ in range(len(self.population) // 2)]
+        self.turns = [0] * (len(self.population) // 2)
 
     def play_match(self, matchindex):
         ai1 = self.groupa[matchindex]
@@ -110,6 +111,7 @@ class BlocAiPopulation:
             turns += 1
             if turns >= maxturns:
                 break
+        self.turns[matchindex] = turns
         if matchboard.check_win() == 0:
             self.fitnesspairs[matchindex][1] += 2
             self.fitnesspairs[matchindex][0] -= 1
@@ -148,6 +150,7 @@ class BlocAiPopulation:
             turns += 1
             if turns >= maxturns:
                 break
+        self.turns[matchindex] = turns
         if matchboard.check_win() == 0:
             self.fitnesspairs[matchindex][1] += 2
             self.fitnesspairs[matchindex][0] -= 1
@@ -224,7 +227,8 @@ class BlocAiPopulation:
                 f.write(f"Matrix Pair {i}; W = {ai.W}\nU = {ai.U}\n")
     
     def report(self, epoch):
-        print(f"Epoch {epoch} finished. Time: {time() - self.start_time:.2f}. Time per average AI: {(time() - self.start_time) / (len(self.population)):.2f}. Total time: {time() - self.cumul_time:.2f}")
+        moves = sum(self.turns) / len(self.turns)
+        print(f"Epoch {epoch} finished. Time: {time() - self.start_time:.2f}. Time per average AI: {(time() - self.start_time) / (len(self.population)):.2f}. Total time: {time() - self.cumul_time:.2f}. Average moves per game: {moves}")
 
     def train(self, dir, minimax=False, depth=4, epochs=100, rounds=3, mutation_rate=0.05):
         self.cumul_time = time()
@@ -243,5 +247,5 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [ 0.25531835,  0.04493948,  0.35401408,  0.00881072, -0.1837255 ],
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
-population = BlocAiPopulation(64, best_ai, 0.2)
-population.train(dir="blocaibatch2", minimax=True, depth=1, epochs=100, rounds=3, mutation_rate=0.05)
+population = BlocAiPopulation(64)
+population.train(dir="blocaibatch1", minimax=False, depth=1, epochs=100, rounds=3, mutation_rate=0.05)

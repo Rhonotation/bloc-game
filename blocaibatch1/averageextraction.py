@@ -51,7 +51,7 @@ file_matrix_paths = [os.path.join(script_dir, f'epoch_{i}.txt') for i in range(1
 # Pass the absolute path to your function
 for j in range(100):  # Adjust the range as needed
     avg_w, avg_u = extract_and_average_matrices(file_matrix_paths[j])
-    with open("stats.txt", "a") as f:
+    with open(os.path.join(script_dir, 'stats.txt'), "a") as f:
         f.write(f"Epoch {j}:\n")
         f.write("Average W Matrix:\n")
         f.write(str(avg_w) + "\n")

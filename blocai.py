@@ -11,11 +11,21 @@ class MatrixAI:
 
     def evaluate_board(self, A, B, side=1):
         if side == 0:
-            A = np.where(A == 0, 1, np.where(A == 1, 0, A))
-            B = np.where(B == 0, 1, np.where(B == 1, 0, B))
-        # 1. Multiply W against both matrices
+            # Create a boolean mask where elements are 0 or 1 (ignoring -1)
+            mask_A = (A == 0) | (A == 1)
+            mask_B = (B == 0) | (B == 1)
+            
+            # Make a quick copy to avoid modifying the board in-place
+            A = A.copy()
+            B = B.copy()
+            
+            # Apply the swap instantly using vector subtraction
+            A[mask_A] = 1 - A[mask_A]
+            B[mask_B] = 1 - B[mask_B]
+
+        # 1. Multiply W & V against both matrices
         M1 = self.W @ A
-        M2 = self.W @ B
+        M2 = self.V @ B
 
         # 2. Add the products
         M_combined = M1 + M2
@@ -82,8 +92,18 @@ class TriMatrixAI(MatrixAI):
 
     def evaluate_board(self, A, B, side=1):
         if side == 0:
-            A = np.where(A == 0, 1, np.where(A == 1, 0, A))
-            B = np.where(B == 0, 1, np.where(B == 1, 0, B))
+            # Create a boolean mask where elements are 0 or 1 (ignoring -1)
+            mask_A = (A == 0) | (A == 1)
+            mask_B = (B == 0) | (B == 1)
+            
+            # Make a quick copy to avoid modifying the board in-place
+            A = A.copy()
+            B = B.copy()
+            
+            # Apply the swap instantly using vector subtraction
+            A[mask_A] = 1 - A[mask_A]
+            B[mask_B] = 1 - B[mask_B]
+
         # 1. Multiply W & V against both matrices
         M1 = self.W @ A
         M2 = self.V @ B

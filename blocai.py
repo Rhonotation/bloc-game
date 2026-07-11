@@ -302,7 +302,7 @@ class BlocAiPopulation:
     
     def report(self, epoch):
         moves = sum(self.turns) / len(self.turns)
-        print(f"Epoch {epoch} finished. Time: {time() - self.start_time:.2f}. Time per average AI: {(time() - self.start_time) / (len(self.population)):.2f}. Total time: {time() - self.cumul_time:.2f}. Average moves per game: {moves}")
+        print(f"\nEpoch {epoch} finished. Time: {time() - self.start_time:.2f}. Time per average AI: {(time() - self.start_time) / (len(self.population)):.2f}. Total time: {time() - self.cumul_time:.2f}. Average moves per game: {moves}. Min and max moves: {min(self.turns)} and {max(self.turns)}")
 
     def train(self, dir, maxturns=100, minimax=False, topn=3, depth=4, epochs=100, rounds=3, mutation_rate=0.05):
         self.cumul_time = time()
@@ -358,7 +358,7 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [ 0.25531835,  0.04493948,  0.35401408,  0.00881072, -0.1837255 ],
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
-population = BlocTriAiPopulation(64)
+population = BlocTriAiPopulation(32)
 trainingdir = "blocaibatchMAT1"
 os.makedirs(trainingdir, exist_ok=True)
-population.train(dir=trainingdir, maxturns=40, minimax=True, depth=3, epochs=100, rounds=1, mutation_rate=0.05, topn=2)
+population.train(dir=trainingdir, maxturns=30, minimax=True, depth=2, epochs=100, rounds=1, mutation_rate=0.1, topn=2)

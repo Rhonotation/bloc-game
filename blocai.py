@@ -249,4 +249,4 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
 population = BlocAiPopulation(64)
-population.train(dir="blocaibatch1", minimax=False, depth=1, epochs=100, rounds=3, mutation_rate=0.05)
+population.train(dir="blocaibatchMA1", minimax=True, depth=2, epochs=100, rounds=3, mutation_rate=0.05)

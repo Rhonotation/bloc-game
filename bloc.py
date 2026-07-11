@@ -224,8 +224,8 @@ class BlocDataStruct:
         boardcells = [self.board[r, c] for r, c in trueneighbors]
         piececells = [self.pieces[r, c] for r, c in trueneighbors]
         pressure = np.count_nonzero(np.array(piececells) == 1 - side) * 2 + np.count_nonzero(np.array(boardcells) == 1 - side)
-        if pressure >= 50:
-            self.pieces[loc] = -1
+        if pressure >= 5:
+            self.pieces[loc[0], loc[1]] = -1
             return True
         return False
 

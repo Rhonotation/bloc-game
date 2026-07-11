@@ -2,7 +2,6 @@ from time import time
 
 import bloc, copy, random, os, heapq
 import numpy as np
-os.makedirs("blocaibatch2", exist_ok=True)
 
 class MatrixAI:
     def __init__(self, W=None, U=None):
@@ -27,10 +26,11 @@ class MatrixAI:
         return score
     
     def minimax(self, board, side, depth=4, topn=3):
+        #print(f"Minimax, depth {depth}.")
         if depth == 0:
             return self.evaluate_board(board.board, board.pieces, side)
         elif board.check_win() != -1:
-            print("Game End")
+            #print("Game End")
             if board.check_win() == side:
                 return float('inf')  # Win for the current side
             elif board.check_win() == 0.5:
@@ -48,7 +48,9 @@ class MatrixAI:
             boards = [boards[i] for i in probable_indices]
             for sboard, move in zip(boards, probable_moves):
                 sboard.full_move(move[0], move[1])
-            return max([-1 * self.minimax(sboard, 1 - side, depth - 1, topn) for sboard in boards])
+            result = max([-1 * self.minimax(sboard, 1 - side, depth - 1, topn) for sboard in boards])
+            #print(f"Final move {result}. Depth {depth}.")
+            return result
 
 class BlocAiPopulation:
     def __init__(self, popsize, ai=None, noise=0):
@@ -87,16 +89,16 @@ class BlocAiPopulation:
         self.fitnesspairs = [[0,0] for _ in range(len(self.population) // 2)]
         self.turns = [0] * (len(self.population) // 2)
 
-    def play_match(self, matchindex):
+    def play_match(self, matchindex, maxturns=100):
         ai1 = self.groupa[matchindex]
         ai2 = self.groupb[matchindex]
         ais = [ai2, ai1]
 
         turns = 0
-        maxturns = 100
-
+        maxturns = maxturns
+        flag = True
         matchboard = bloc.BlocDataStruct()
-        while matchboard.check_win() == -1:
+        while flag:
             print(matchboard.board, matchboard.pieces)
             legalmoves = self.get_legal_moves_cached(matchboard)
             legalmovematrices = []
@@ -110,8 +112,11 @@ class BlocAiPopulation:
             moveindex = np.argmax(movescores)
             matchboard.full_move(legalmoves[moveindex][0], legalmoves[moveindex][1])
             turns += 1
+            print(turns)
             if turns >= maxturns:
-                break
+                flag = False
+            if matchboard.check_win() != -1:
+                flag = False
         self.turns[matchindex] = turns
         if matchboard.check_win() == 0:
             self.fitnesspairs[matchindex][1] += 2
@@ -133,10 +138,9 @@ class BlocAiPopulation:
 
         turns = 0
         maxturns = 100
-
+        flag = True
         matchboard = bloc.BlocDataStruct()
-        while matchboard.check_win() == -1:
-            print("move")
+        while flag:
             legalmoves = self.get_legal_moves_cached(matchboard)
             legalmovematrices = []
             for move in legalmoves:
@@ -150,7 +154,9 @@ class BlocAiPopulation:
             matchboard.full_move(legalmoves[moveindex][0], legalmoves[moveindex][1])
             turns += 1
             if turns >= maxturns:
-                break
+                flag = False
+            if matchboard.check_win() != -1:
+                flag = False
         self.turns[matchindex] = turns
         if matchboard.check_win() == 0:
             self.fitnesspairs[matchindex][1] += 2
@@ -165,12 +171,12 @@ class BlocAiPopulation:
             self.fitnesspairs[matchindex][0] -= 0.1
             self.fitnesspairs[matchindex][1] -= 0.1
 
-    def play_comp(self, matchindex, minimax=False, depth=4, rounds=3):
+    def play_comp(self, matchindex, maxturns=100, minimax=False, depth=4, rounds=3):
         for _ in range(rounds):
             if minimax:
                 self.play_minimax_match(matchindex, depth=depth)
             else:
-                self.play_match(matchindex)
+                self.play_match(matchindex, maxturns)
         if self.fitnesspairs[matchindex][0] > self.fitnesspairs[matchindex][1]:
             self.winners[matchindex] = 0
         elif self.fitnesspairs[matchindex][1] > self.fitnesspairs[matchindex][0]:
@@ -178,9 +184,11 @@ class BlocAiPopulation:
         elif self.fitnesspairs[matchindex][0] == self.fitnesspairs[matchindex][1]:
             self.winners[matchindex] = random.choice([0, 1])
     
-    def play_all(self, minimax=False, depth=4, rounds=3):
+    def play_all(self, maxturns=100, minimax=False, depth=4, rounds=3):
         for i in range(len(self.population) // 2):
-            self.play_comp(i, minimax=minimax, depth=depth, rounds=rounds)
+            self.match_time = time()
+            self.play_comp(i, maxturns=maxturns, minimax=minimax, depth=depth, rounds=rounds)
+            print(f"\rProgress: " + "#" * (i + 1) + "-" * (len(self.population) // 2 - i - 1) + f", Time: {time()-self.match_time}, Total Time: {time()-self.start_time}. Moves: {self.turns[i]}.", end="")
 
     def kill(self):
         new_population = []
@@ -211,11 +219,13 @@ class BlocAiPopulation:
                 new_population.append(MatrixAI(child_W, child_U))
         self.population = np.array(new_population)
     
-    def epoch(self, minimax=False, depth=4, rounds=3, mutation_rate=0.05):
+    def epoch(self, maxturns=100, minimax=False, depth=4, rounds=3, mutation_rate=0.05):
+        print(f"\rProgress: " + "-" * (len(self.population) // 2), end="")
         self.start_time = time()
+
         self.cache = {}
         self.splitforplay()
-        self.play_all(depth=depth, minimax=minimax, rounds=rounds)
+        self.play_all(depth=depth, maxturns=maxturns, minimax=minimax, rounds=rounds)
         self.kill()
         self.split()
         self.reproduce(mutation_rate)
@@ -231,10 +241,10 @@ class BlocAiPopulation:
         moves = sum(self.turns) / len(self.turns)
         print(f"Epoch {epoch} finished. Time: {time() - self.start_time:.2f}. Time per average AI: {(time() - self.start_time) / (len(self.population)):.2f}. Total time: {time() - self.cumul_time:.2f}. Average moves per game: {moves}")
 
-    def train(self, dir, minimax=False, depth=4, epochs=100, rounds=3, mutation_rate=0.05):
+    def train(self, dir, maxturns=100, minimax=False, depth=4, epochs=100, rounds=3, mutation_rate=0.05):
         self.cumul_time = time()
         for i in range(epochs):
-            self.epoch(depth=depth, minimax=minimax, rounds=rounds, mutation_rate=mutation_rate)
+            self.epoch(depth=depth, maxturns=maxturns, minimax=minimax, rounds=rounds, mutation_rate=mutation_rate)
             self.record(i, f"{dir}/epoch_{i}.txt")
             self.report(i)
 
@@ -249,4 +259,6 @@ best_ai = MatrixAI(np.array([[ 0.23838392, -0.13419667,  0.0150143,  -0.19654428
  [-0.20483909,  0.0268084,  -0.2960147,  -0.09777757,  0.05309948]]))
 
 population = BlocAiPopulation(64)
-population.train(dir="blocaibatchMA1", minimax=True, depth=2, epochs=100, rounds=3, mutation_rate=0.05)
+trainingdir = "blocaibatchMA1"
+os.makedirs(trainingdir, exist_ok=True)
+population.train(dir=trainingdir, maxturns=55, minimax=True, depth=0, epochs=100, rounds=3, mutation_rate=0.05)
